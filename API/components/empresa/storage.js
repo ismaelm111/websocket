@@ -1,5 +1,5 @@
 const Model = require('./model')
-const ModelRepresentante = require('../componentes/representantelegal/model')
+const ModelRepresentante = require('../representantelegal/model')
 
 async function agregarEmpresa( dato ) {
     const resultado = await new Model( dato )

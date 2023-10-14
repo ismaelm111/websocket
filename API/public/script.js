@@ -1,10 +1,26 @@
 function guardar() {
 
-    let codigo_ = document.getElementById('codigo').value
+    let ruc_ = document.getElementById('ruc').value
+    let cedula_ = document.getElementById('cedula').value
     let nombre_ = document.getElementById('nombre').value
-    let valor_ = document.getElementById('valor').value
+    let apellido_ = document.getElementById('apellido').value
+    let email_ = document.getElementById('email').value
+    let domicilio_ = document.getElementById('domicilio').value
+    let telefono_ = document.getElementById('telefono').value
+    let empresas_ = document.getElementById('hfdempresas').value
 
-    let data = { codigo:codigo_, nombre:nombre_, valor:valor_ }
+    let data = 
+        {
+            ruc:ruc_,
+            cedula:cedula_,
+            nombre:nombre_,
+            apellido:apellido_,
+            email:email_,
+            domicilio:domicilio_,
+            telefono:telefono_,
+            empresas:empresas_
+        }
+    
 
     return new Promise((resolve, reject) => {
         const request_options = {
@@ -15,7 +31,7 @@ function guardar() {
             body: JSON.stringify(data) // Convertir los datos a JSON
         };
 
-        fetch('/e', request_options)
+        fetch('/representante', request_options)
             .then((data) => resolve(data.json()))
             .catch((error) => reject(`[error]: ${error}`));
     })
@@ -31,14 +47,15 @@ function guardar_empresa() {
         } )
 }
 
+const API = 'http://localhost:3000/empresa'
 
-function obtenerEmpresas(){
-        fetch('/empresa')
-            .then((response) => response.json())
-            .then(data => {
-                llenarSelectEmpresa(data);
-            })
-            .catch((error) => reject(`[error]: ${error}`));    
+async function obtenerEmpresas(){
+   try{
+    let response = await fetch(`${API}`)
+    llenarSelectEmpresa(personaje( await response.json()))
+   }catch(error){
+    console.error(`[error]: ${error}`)
+   }        
 }
 
 
