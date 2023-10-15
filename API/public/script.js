@@ -7,7 +7,9 @@ function guardar() {
     let email_ = document.getElementById('email').value
     let domicilio_ = document.getElementById('domicilio').value
     let telefono_ = document.getElementById('telefono').value
-    let empresas_ = document.getElementById('hfdempresas').value
+    let empresas_ = document.getElementById('hdnEmpresas').value
+
+    let empresasJson_ = JSON.parse('[' + empresas_.slice(0, -1) + ']');
 
     let data = 
         {
@@ -18,10 +20,10 @@ function guardar() {
             email:email_,
             domicilio:domicilio_,
             telefono:telefono_,
-            empresas:empresas_
+            empresas:empresasJson_
         }
-    
 
+        console.log(data);
     return new Promise((resolve, reject) => {
         const request_options = {
             method: 'POST',
@@ -31,13 +33,13 @@ function guardar() {
             body: JSON.stringify(data) // Convertir los datos a JSON
         };
 
-        fetch('/representante', request_options)
+        fetch('/representantelegal', request_options)
             .then((data) => resolve(data.json()))
             .catch((error) => reject(`[error]: ${error}`));
     })
 }
 
-function guardar_empresa() {
+function guardarRepresentante() {
     guardar()
         .then( (response) => {
             alert('Registro exitoso.')
@@ -47,26 +49,50 @@ function guardar_empresa() {
         } )
 }
 
-const API = '/empresa'
+
+function agregarEmpresa(){
+    var elementoSelect = document.getElementById("empresas"); 
+    var opcionSeleccionada = elementoSelect.options[elementoSelect.selectedIndex];
+    var valorSeleccionado = opcionSeleccionada.value;
+    var textoSeleccionado = opcionSeleccionada.text;
+    var divEmpresas = document.getElementById("dvEmpresasSeleccionadas"); 
+    var divEmpresa = document.createElement('div'); 
+    divEmpresa.textContent = textoSeleccionado;
+    divEmpresas.appendChild(divEmpresa);
+    var hdnEmpresas = document.getElementById("hdnEmpresas"); 
+    hdnEmpresas.value = hdnEmpresas.value + '{"empresa" : {"_id": "' + valorSeleccionado +'"}},' ;
+}
+
+
 
 async function obtenerEmpresas(){
-   try{
-    let response = await fetch(`${API}`)
-    llenarSelectEmpresa(personaje( await response.json()))
-   }catch(error){
-    console.error(`[error]: ${error}`)
-   }        
+   fetch('/empresa')
+   .then(response => {
+    if(!response.ok){
+        throw new Error('la solicitud no se pudo completar');        
+    }
+    return response.json();    
+   })
+   .then(data => {    
+    llenarSelectEmpresa(data)
+   })
+   .catch(error => {
+    console.error(error)
+   });   
 }
 
 
 function llenarSelectEmpresa(data){
-    const select = document.getElementById('empresas');
-    data.array.forEach(element => {
+    const select = document.getElementById('empresas');    
+    const option = document.createElement('option');
+    option.text = 'Seleccione una empresa';
+    option.value = '';
+    select.appendChild(option);
+    data.body.forEach(element => {    
         const option = document.createElement('option');
         option.text = element.nombre;
         option.value = element._id;
         select.appendChild(option);
-
     });
 }
 
