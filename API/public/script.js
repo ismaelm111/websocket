@@ -47,7 +47,7 @@ function guardar_empresa() {
         } )
 }
 
-const API = 'http://localhost:3000/empresa'
+const API = '/empresa'
 
 async function obtenerEmpresas(){
    try{
