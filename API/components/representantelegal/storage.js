@@ -14,10 +14,11 @@ async function obtenerRepresentante( filtro_ruc ) {
         Model.find( filtro )            
             .populate({
                 path:'empresas',
-                populate:{
+                model:'empresa'
+               /* populate:{
                     path: 'empresa',
                     model:'empresa'
-                }
+                }*/
             })
             .exec()
             .then( data => {
@@ -36,8 +37,8 @@ async function obtenerRepresentante( filtro_ruc ) {
                     objeto.empresas = []
                     for (let detalle of elemento.empresas) {
                         registro = { 
-                            nombre: detalle.empresa.nombre,
-                            ruc: detalle.empresa.ruc                            
+                            nombre: detalle.nombre,
+                            ruc: detalle.ruc                            
                         }
                         objeto.empresas.push( registro )
                     }

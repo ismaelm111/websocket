@@ -60,7 +60,7 @@ function agregarEmpresa(){
     divEmpresa.textContent = textoSeleccionado;
     divEmpresas.appendChild(divEmpresa);
     var hdnEmpresas = document.getElementById("hdnEmpresas"); 
-    hdnEmpresas.value = hdnEmpresas.value + '{"empresa" : {"_id": "' + valorSeleccionado +'"}},' ;
+    hdnEmpresas.value = hdnEmpresas.value + '{"_id": "' + valorSeleccionado +'"},' ;
 }
 
 

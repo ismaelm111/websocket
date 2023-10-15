@@ -5,10 +5,15 @@ async function agregarEmpresa( dato ) {
     const resultado = await new Model( dato )
     const empresa = resultado.save()
     if(dato.representante != null){
-        idRepresentante = {_id : dato.representante}
-        const asignarRepresentante = await ModelRepresentante.findOne(idRepresentante)
-        asignarRepresentante.empresas.push(empresa._id)
-        const resultadoRepresentante = await ModelRepresentante.save()
+        representante = {_id : dato.representante}
+        const asignarRepresentante = await ModelRepresentante.findOne(representante)
+        console.log(asignarRepresentante)
+        console.log(empresa._id)
+        console.log(resultado._id)
+        asignarRepresentante.empresas.push(resultado._id)
+        console.log(asignarRepresentante)
+        const resultadoRepresentante = await asignarRepresentante.save()
+
     }
     return empresa
 }
