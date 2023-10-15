@@ -7,11 +7,7 @@ async function agregarEmpresa( dato ) {
     if(dato.representante != null){
         representante = {_id : dato.representante}
         const asignarRepresentante = await ModelRepresentante.findOne(representante)
-        console.log(asignarRepresentante)
-        console.log(empresa._id)
-        console.log(resultado._id)
-        asignarRepresentante.empresas.push(resultado._id)
-        console.log(asignarRepresentante)
+        asignarRepresentante.empresas.push(resultado._id)        
         const resultadoRepresentante = await asignarRepresentante.save()
 
     }

@@ -22,8 +22,6 @@ function guardar() {
             telefono:telefono_,
             empresas:empresasJson_
         }
-
-        console.log(data);
     return new Promise((resolve, reject) => {
         const request_options = {
             method: 'POST',
