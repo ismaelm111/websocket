@@ -7,9 +7,24 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="script.js"></script>
+    <script type="text/javascript" src="/socket.io/socket.io.js"></script>
 </head>
 
 <body>
+    <script>
+        var socket = io.connect('http://localhost:3000/', {
+            forceNet: true
+        })
+        socket.on('asignacionEmpresa', (data)=>{  
+        //document.getElementById('nombreEmpresa').value = 'Se le ha asignado una nueva empresa: '+data.nombreEmpresa;
+        const select = document.getElementById('empresas');    
+        const option = document.createElement('option');
+        option.text = data.nombreEmpresa;
+        //option.value = element._id;
+        select.appendChild(option);
+        })
+      </script>
+<div class="mi-div"><input type="text" id="nombreEmpresa" /></div>
     <div id="RepresentanteLegal" class="justify-content-center align-items-center col-lg-8 col-sm-11">
         <div class="d-grid gap-2 col-3 mx-auto">
             <h2>Representante</h2>
