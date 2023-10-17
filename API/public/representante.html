@@ -8,23 +8,45 @@
     <link rel="stylesheet" href="style.css">
     <script type="text/javascript" src="script.js"></script>
     <script type="text/javascript" src="/socket.io/socket.io.js"></script>
-</head>
-
-<body>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
         var socket = io.connect('http://localhost:3000/', {
             forceNet: true
         })
-        socket.on('asignacionEmpresa', (data)=>{  
-        //document.getElementById('nombreEmpresa').value = 'Se le ha asignado una nueva empresa: '+data.nombreEmpresa;
-        const select = document.getElementById('empresas');    
-        const option = document.createElement('option');
-        option.text = data.nombreEmpresa;
-        //option.value = element._id;
-        select.appendChild(option);
+        socket.on('asignacionEmpresa', (data) => {
+            //document.getElementById('nombreEmpresa').value = 'Se le ha asignado una nueva empresa: '+data.nombreEmpresa;
+            obtenerEmpresas();
+            var mensaje = "";
+            if (data.responsable != "") {
+                var divEmpresas = document.getElementById("dvEmpresasSeleccionadas");
+                var divEmpresa = document.createElement('div');
+                divEmpresa.textContent = data.nombreEmpresa;
+                divEmpresas.appendChild(divEmpresa);
+                mensaje = 'Se le ha asignado una nueva empresa al representante: ' + data.nombreEmpresa;
+            } else {
+                mensaje = 'Se le ha agregado una nueva empresa: ' + data.nombreEmpresa;
+            }
+
+            let notificationbody = document.getElementById('notification-body');
+            notificationbody.textContent = mensaje;
+
+            var notification = new bootstrap.Toast(document.getElementById('notification'));            
+            notification.show();
+
+
         })
-      </script>
-<div class="mi-div"><input type="text" id="nombreEmpresa" /></div>
+    </script>
+</head>
+
+<body>
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 11">
+        <div class="toast text-white bg-primary" id="notification" role="alert" aria-live="assertive" aria-atomic="true" >            
+            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+            <div id="notification-body" class="toast-body">               
+            </div>
+            
+        </div>
+    </div>    
     <div id="RepresentanteLegal" class="justify-content-center align-items-center col-lg-8 col-sm-11">
         <div class="d-grid gap-2 col-3 mx-auto">
             <h2>Representante</h2>
@@ -107,10 +129,10 @@
             </div>
         </div>
         <div class="col-6 mx-auto">
-            <button onclick="guardarRepresentante()" class="btn btn-success col-4">Guardar</button>
+            <button id="btnGuardar" onclick="guardarRepresentante()" class="btn btn-success col-4">Guardar</button>
             <button onclick="cancelarRepresentante()" class="btn btn-danger col-4">Cancelar</button>
         </div>
-    </div>
+    </div>    
 </body>
 
 </html>

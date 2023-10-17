@@ -11,17 +11,17 @@ function guardar() {
 
     let empresasJson_ = JSON.parse('[' + empresas_.slice(0, -1) + ']');
 
-    let data = 
-        {
-            ruc:ruc_,
-            cedula:cedula_,
-            nombre:nombre_,
-            apellido:apellido_,
-            email:email_,
-            domicilio:domicilio_,
-            telefono:telefono_,
-            empresas:empresasJson_
-        }
+    let data =
+    {
+        ruc: ruc_,
+        cedula: cedula_,
+        nombre: nombre_,
+        apellido: apellido_,
+        email: email_,
+        domicilio: domicilio_,
+        telefono: telefono_,
+        empresas: empresasJson_
+    }
     return new Promise((resolve, reject) => {
         const request_options = {
             method: 'POST',
@@ -38,55 +38,63 @@ function guardar() {
 }
 
 function guardarRepresentante() {
+    var mensaje = "";
     guardar()
-        .then( (response) => {
-            alert('Registro exitoso.')
-        } )
-        .catch( (error) => {
-            alert('Error al ingresar.')
-        } )
+        .then((response) => {
+            mensaje = 'Registro exitoso.';
+            document.getElementById('btnGuardar').disabled = false;
+            let notificationbody = document.getElementById('notification-body');
+            notificationbody.textContent = 'Registro Existoso';
+            var notification = new bootstrap.Toast(document.getElementById('notification'));
+            notification.show();
+        })
+        .catch((error) => {
+            alert('Error al ingresar.');
+        })
+
 }
 
 
-function agregarEmpresa(){
-    var elementoSelect = document.getElementById("empresas"); 
+function agregarEmpresa() {
+    var elementoSelect = document.getElementById("empresas");
     var opcionSeleccionada = elementoSelect.options[elementoSelect.selectedIndex];
     var valorSeleccionado = opcionSeleccionada.value;
     var textoSeleccionado = opcionSeleccionada.text;
-    var divEmpresas = document.getElementById("dvEmpresasSeleccionadas"); 
-    var divEmpresa = document.createElement('div'); 
+    var divEmpresas = document.getElementById("dvEmpresasSeleccionadas");
+    var divEmpresa = document.createElement('div');
     divEmpresa.textContent = textoSeleccionado;
     divEmpresas.appendChild(divEmpresa);
-    var hdnEmpresas = document.getElementById("hdnEmpresas"); 
-    hdnEmpresas.value = hdnEmpresas.value + '{"_id": "' + valorSeleccionado +'"},' ;
+    var hdnEmpresas = document.getElementById("hdnEmpresas");
+    hdnEmpresas.value = hdnEmpresas.value + '{"_id": "' + valorSeleccionado + '"},';
 }
 
 
 
-async function obtenerEmpresas(){
-   fetch('/empresa')
-   .then(response => {
-    if(!response.ok){
-        throw new Error('la solicitud no se pudo completar');        
-    }
-    return response.json();    
-   })
-   .then(data => {    
-    llenarSelectEmpresa(data)
-   })
-   .catch(error => {
-    console.error(error)
-   });   
+async function obtenerEmpresas() {
+    fetch('/empresa')
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('la solicitud no se pudo completar');
+            }
+            return response.json();
+        })
+        .then(data => {
+            llenarSelectEmpresa(data)
+        })
+        .catch(error => {
+            console.error(error)
+        });
 }
 
 
-function llenarSelectEmpresa(data){
-    const select = document.getElementById('empresas');    
+function llenarSelectEmpresa(data) {
+    const select = document.getElementById('empresas');
+    select.innerHTML = '';
     const option = document.createElement('option');
     option.text = 'Seleccione una empresa';
     option.value = '';
     select.appendChild(option);
-    data.body.forEach(element => {    
+    data.body.forEach(element => {
         const option = document.createElement('option');
         option.text = element.nombre;
         option.value = element._id;
@@ -94,6 +102,7 @@ function llenarSelectEmpresa(data){
     });
 }
 
-window.addEventListener('load', function(){
+window.addEventListener('load', function () {
     obtenerEmpresas();
 })
+

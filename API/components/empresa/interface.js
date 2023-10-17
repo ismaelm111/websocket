@@ -16,12 +16,10 @@ routes.post('/', function(req, res){
     controller.agregarEmpresa( req.body )
         .then((data) => {
             // Emitir una notificación de empresa asignada por WebSocket.
-            const asignacionEmpresa = {
-                representanteLegalId: req.body.representanteLegalId, // Obtener el ID del representante legal de alguna manera.
-                nombreEmpresa: req.body.nombre, // Asegúrate de obtener el nombre de la empresa asignada de alguna manera.
-                
-            };  
-            
+            const asignacionEmpresa = {                
+                nombreEmpresa: req.body.nombre, // Asegúrate de obtener el nombre de la empresa asignada de alguna manera.                
+                responsable: req.body.representante != null ? req.body.representante : ""
+            };              
             req.io.emit('asignacionEmpresa', asignacionEmpresa);
             console.log('Cliente WebSocket conectado asignacionEmpresa');
             // Respuesta HTTP de éxito.
